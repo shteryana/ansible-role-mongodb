@@ -127,7 +127,7 @@
     owner: "{{ mongodb_user }}"
     group: "root"
     mode: 0600
-  when: ( mongodb_net_ssl_cafile is defined
+  when: ( mongodb_net_ssl_clusterfile is defined
         and clusterfile_stat is defined
         and not clusterfile_stat.stat.exists )
 

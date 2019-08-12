@@ -31,7 +31,14 @@ mongodb_net_port: 27017                          # Specify port number
 mongodb_net_ssl: disabled                        # Enable or disable ssl connections
 mongodb_net_ssl_mode: ""                         # Set the ssl mode (RequireSSL / preferSSL / AllowSSL / disabled)
 mongodb_net_ssl_pemfile: ""                      # Location of the pemfile to use for ssl
+mongodb_net_ssl_cafile: ""                       # The root certificate chain from the Certificate Authority
+mongodb_net_ssl_clusterfile: ""                  # The x.509 certificate-key file for membership authentication for the cluster or replica set.
 mongodb_net_ssl_host: ""                         # Valid ssl hostname
+
+mongodb_net_ssl_location : /etc/mongodb/ssl
+mongodb_net_ssl_pemfile_location: "/etc/mongodb/ssl/mongod.pem"
+mongodb_net_ssl_cafile_location: "/etc/mongodb/ssl/rootCA.crt"
+mongodb_net_ssl_clusterfile_location: "/etc/mongodb/ssl/mongodCluster.pem"
 
 ## processManagement Options
 # Fork server process

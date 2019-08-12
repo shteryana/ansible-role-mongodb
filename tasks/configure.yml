@@ -34,7 +34,7 @@
     owner: "{{ mongodb_user }}"
     group: "root"
     mode: 0600
-  when: mongodb_replication_replset | length > 0
+  when: mongodb_replication_replset | length > 0 and mongodb_net_ssl_pemfile is undefined
 
 - name: Create log dir if missing
   file:
@@ -71,6 +71,44 @@
     setype: 'mongod_var_lib_t'
     recurse: true
     follow: true
+
+- name: Ensure ssl credentials directory
+  file:
+    path: "{{ mongodb_net_ssl_location }}"
+    state: directory
+    owner: "{{ mongodb_user }}"
+    group: "{{ mongodb_user }}"
+    setype: 'mongod_var_lib_t'
+    recurse: true
+    follow: true
+  when: mongodb_net_ssl_pemfile is defined or mongodb_net_ssl_cafile is defined or mongodb_net_ssl_clusterfile is defined
+
+- name: Copy x509 credentials
+  copy:
+    dest: "{{ mongodb_net_ssl_pemfile_location }}"
+    src: "{{ mongodb_net_ssl_pemfile }}"
+    owner: "{{ mongodb_user }}"
+    group: "root"
+    mode: 0600
+  when: mongodb_net_ssl_pemfile is defined
+
+- name: Copy x509 root CA certificate
+  copy:
+    dest: "{{ mongodb_net_ssl_cafile_location }}"
+    src: "{{ mongodb_net_ssl_cafile }}"
+    owner: "{{ mongodb_user }}"
+    group: "root"
+    mode: 0600
+  when: mongodb_net_ssl_cafile is defined
+
+- name: Copy x509 cluster auth credentials
+  copy:
+    dest: "{{ mongodb_net_ssl_clusterfile_location }}"
+    src: "{{ mongodb_net_ssl_clusterfile }}"
+    owner: "{{ mongodb_user }}"
+    group: "root"
+    mode: 0600
+  when: mongodb_net_ssl_clusterfile is defined
 
 - name: Configure mongodb
   template:

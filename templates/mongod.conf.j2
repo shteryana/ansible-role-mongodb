@@ -12,7 +12,9 @@ net:
   {% if mongodb_net_ssl_pemfile is defined and mongodb_net_ssl_mode is defined and mongodb_net_ssl == 'enabled' -%}
   ssl:
     mode: {{ mongodb_net_ssl_mode }}
-    PEMKeyFile: {{ mongodb_net_ssl_pemfile }}
+    PEMKeyFile: {{ mongodb_net_ssl_pemfile_location }}
+    CAFile: {{ mongodb_net_ssl_cafile_location }}
+    clusterFile: {{ mongodb_net_ssl_clusterfile_location }}
   {% endif %}
 
 processManagement:
@@ -32,8 +34,11 @@ replication:
 
 security:
   authorization: {{ mongodb_security_authorization }}
-  {% if mongodb_replication_replset and mongodb_security_authorization == 'enabled' -%}
+  {% if mongodb_replication_replset and mongodb_security_authorization == 'enabled' and mongodb_net_ssl_clusterfile is undefined -%}
   keyFile: {{ mongodb_security_keyfile }}
+  {% endif -%}
+  {% if mongodb_net_ssl_clusterfile is defined -%}
+  clusterAuthMode: x509
   {% endif -%}
   javascriptEnabled: {{ mongodb_security_javascript_enabled | to_nice_json }}
 

@@ -75,6 +75,9 @@
     login_port: "{{ mongodb_login_port|default(27017) }}"
     login_host: "{{ mongodb_login_host|default('localhost') }}"
     ssl: "{{ True if mongodb_net_ssl_mode == 'requireSSL' else False }}"
+    ssl_certfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile_location is defined else null }}"
+    ssl_keyfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile_location is defined else null }}"
+    ssl_ca_certs: "{{ mongodb_net_ssl_cafile_location if mongodb_net_ssl_cafile_location is defined else null }}"
   with_items:
     - "{{ mongodb_users | default([]) }}"
   when: ( mongodb_replication_replset
@@ -95,6 +98,9 @@
     login_port: "{{ mongodb_net_port }}"
     login_host: "{{ mongodb_login_host|default('localhost') }}"
     ssl: "{{ True if mongodb_net_ssl_mode == 'requireSSL' else False }}"
+    ssl_certfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile_location is defined else null }}"
+    ssl_keyfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile_location is defined else null }}"
+    ssl_ca_certs: "{{ mongodb_net_ssl_cafile_location if mongodb_net_ssl_cafile_location is defined else null }}"
   with_items:
     - "{{ mongodb_users | default([]) }}"
   when: ( mongodb_security_authorization == 'enabled'
@@ -116,6 +122,9 @@
     login_port: "{{ mongodb_login_port|default(27017) }}"
     login_host: "{{ mongodb_login_host|default('localhost') }}"
     ssl: "{{ True if mongodb_net_ssl_mode == 'requireSSL' else False }}"
+    ssl_certfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile_location is defined else null }}"
+    ssl_keyfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile_location is defined else null }}"
+    ssl_ca_certs: "{{ mongodb_net_ssl_cafile_location if mongodb_net_ssl_cafile_location is defined else null }}"
   with_items:
     - "{{ mongodb_oplog_users | default([]) }}"
   when: ( mongodb_replication_replset | length > 0

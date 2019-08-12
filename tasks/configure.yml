@@ -83,7 +83,7 @@
     follow: true
   when: mongodb_net_ssl_pemfile is defined or mongodb_net_ssl_cafile is defined or mongodb_net_ssl_clusterfile is defined
 
-- name: Ensure Copy x509 credentials
+- name: Ensure x509 credentials
   stat: path={{ mongodb_net_ssl_pemfile_location }}
   register: pemfile_stat
   when: mongodb_net_ssl_pemfile is defined

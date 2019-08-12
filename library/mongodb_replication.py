@@ -80,6 +80,21 @@ options:
         required: false
         default: "CERT_REQUIRED"
         choices: ["CERT_REQUIRED", "CERT_OPTIONAL", "CERT_NONE"]
+    ssl_certfile:
+        description:
+            - Specifies the path to a client certificate to present when authenticating.
+        required: false
+        default: client.pem
+    ssl_keyfile:
+        description:
+            - Specifies the path to the private key for the client certificate to present when authenticating.
+        required: false
+        default: client.pem
+    ssl_ca_certs:
+        description:
+            - Specifies the path to a specific set of CA certificates to validate against when authenticating.
+        required: false
+        default: rootCA.crt
     build_indexes:
         description:
             - Determines whether the mongod builds indexes on this member.
@@ -352,6 +367,9 @@ def main():
             host_type=dict(default='replica', choices=['replica','arbiter']),
             ssl=dict(default=False, type='bool'),
             ssl_cert_reqs=dict(default='CERT_REQUIRED', choices=['CERT_NONE', 'CERT_OPTIONAL', 'CERT_REQUIRED']),
+            ssl_certfile=dict(default='client.pem'),
+            ssl_keyfile=dict(default='client.pem'),
+            ssl_ca_certs=dict(default='rootCA.crt'),
             build_indexes = dict(type='bool', default='yes'),
             hidden = dict(type='bool', default='no'),
             priority = dict(default='1.0'),
@@ -374,6 +392,9 @@ def main():
     host_port = module.params['host_port']
     host_type = module.params['host_type']
     ssl = module.params['ssl']
+    ssl_certfile = module.params['ssl_certfile']
+    ssl_keyfile = module.params['ssl_keyfile']
+    ssl_ca_certs = module.params['ssl_ca_certs']
     state = module.params['state']
     priority = float(module.params['priority'])
 
@@ -396,6 +417,10 @@ def main():
         if ssl:
             connection_params["ssl"] = ssl
             connection_params["ssl_cert_reqs"] = getattr(ssl_lib, module.params['ssl_cert_reqs'])
+            connection_params["ssl_certfile"] = ssl_certfile
+            connection_params["ssl_keyfile"] = ssl_keyfile
+            connection_params["ssl_ca_certs"] = ssl_ca_certs
+            connection_params["ssl_match_hostname"] = False #XXX: FIXME
 
         client = MongoClient(**connection_params)
         authenticate(client, login_user, login_password)
@@ -415,6 +440,10 @@ def main():
             if ssl:
                 connection_params["ssl"] = ssl
                 connection_params["ssl_cert_reqs"] = getattr(ssl_lib, module.params['ssl_cert_reqs'])
+                connection_params["ssl_certfile"] = ssl_certfile
+                connection_params["ssl_keyfile"] = ssl_keyfile
+                connection_params["ssl_ca_certs"] = ssl_ca_certs
+                connection_params["ssl_match_hostname"] = False
 
             client = MongoClient(**connection_params)
             authenticate(client, login_user, login_password)

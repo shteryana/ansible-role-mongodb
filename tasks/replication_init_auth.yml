@@ -14,9 +14,9 @@
     priority: "{{ item.priority|default(1.0) }}"
     votes: "{{ item.votes|default(omit) }}"
     ssl: "{{ True if mongodb_net_ssl_mode == 'requireSSL' else False }}"
-    ssl_certfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile_location is defined else null }}"
-    ssl_keyfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile_location is defined else null }}"
-    ssl_ca_certs: "{{ mongodb_net_ssl_cafile_location if mongodb_net_ssl_cafile_location is defined else null }}"
+    ssl_certfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile is defined else null }}"
+    ssl_keyfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile is defined else null }}"
+    ssl_ca_certs: "{{ mongodb_net_ssl_cafile_location if mongodb_net_ssl_cafile is defined else null }}"
   with_items:
     - "{{ mongodb_replication_params|default([]) }}"
   register: mongodb_replica_init
@@ -40,9 +40,9 @@
     priority: "{{ item.priority|default(1.0) }}"
     votes: "{{ item.votes|default(omit) }}"
     ssl: "{{ True if mongodb_net_ssl_mode == 'requireSSL' else False }}"
-    ssl_certfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile_location is defined else null }}"
-    ssl_keyfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile_location is defined else null }}"
-    ssl_ca_certs: "{{ mongodb_net_ssl_cafile_location if mongodb_net_ssl_cafile_location is defined else null }}"
+    ssl_certfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile is defined else null }}"
+    ssl_keyfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile is defined else null }}"
+    ssl_ca_certs: "{{ mongodb_net_ssl_cafile_location if mongodb_net_ssl_cafile is defined else null }}"
   when: mongodb_replica_init is failed
   with_items:
     - "{{ mongodb_replication_params|default([]) }}"

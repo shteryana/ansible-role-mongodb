@@ -3,7 +3,11 @@
 mongodb_package: mongodb-org
 mongodb_package_state: present
 mongodb_version: "4.2"
-mongodb_apt_keyserver: keyserver.ubuntu.com
+mongodb_apt_keyurl:
+  "3.4": "https://www.mongodb.org/static/pgp/server-3.4.asc"
+  "3.6": "https://www.mongodb.org/static/pgp/server-3.6.asc"
+  "4.0": "https://www.mongodb.org/static/pgp/server-4.0.asc"
+  "4.2": "https://www.mongodb.org/static/pgp/server-4.2.asc"
 mongodb_apt_key_id:
   "3.4": "0C49F3730359A14518585931BC711F9BA15703C6"
   "3.6": "2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5"

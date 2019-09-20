@@ -11,7 +11,7 @@
 
 - name: Add APT key
   apt_key:
-    keyserver: "{{ mongodb_apt_keyserver }}"
+    url: "{{ mongodb_apt_keyurl[mongodb_major_version] }}"
     id: "{{ mongodb_apt_key_id[mongodb_major_version] }}"
   when: mongodb_package == 'mongodb-org'
 

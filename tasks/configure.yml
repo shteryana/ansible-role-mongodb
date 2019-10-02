@@ -86,7 +86,8 @@
 - name: Ensure x509 credentials
   stat: path={{ mongodb_net_ssl_pemfile_location }}
   register: pemfile_stat
-  when: mongodb_net_ssl_pemfile is defined
+  when: mongodb_net_ssl_pemfile is defined and
+        mongodb_net_ssl == "enabled"
 
 - name: Copy x509 credentials
   copy:
@@ -95,14 +96,15 @@
     owner: "{{ mongodb_user }}"
     group: "root"
     mode: 0600
-  when: ( mongodb_net_ssl_pemfile is defined
+  when: mongodb_net_ssl == "enabled" and
+        mongodb_net_ssl_pemfile is defined
         and pemfile_stat is defined
-        and not pemfile_stat.stat.exists )
+        and not pemfile_stat.stat.exists
 
 - name: Ensure x509 root CA certificate
   stat: path={{ mongodb_net_ssl_cafile_location }}
   register: rootcafile_stat
-  when: mongodb_net_ssl_cafile is defined
+  when: mongodb_net_ssl == "enabled" and mongodb_net_ssl_cafile is defined
 
 - name: Copy x509 root CA certificate
   copy:
@@ -111,14 +113,15 @@
     owner: "{{ mongodb_user }}"
     group: "root"
     mode: 0600
-  when: ( mongodb_net_ssl_cafile is defined
+  when: mongodb_net_ssl == "enabled"
+        and mongodb_net_ssl_cafile is defined
         and rootcafile_stat is defined
-        and not rootcafile_stat.stat.exists )
+        and not rootcafile_stat.stat.exists
 
 - name: Ensure x509 cluster auth credentials
   stat: path={{ mongodb_net_ssl_clusterfile_location }}
   register: clusterfile_stat
-  when: mongodb_net_ssl_clusterfile is defined
+  when: mongodb_net_ssl == "enabled" and mongodb_net_ssl_clusterfile is defined
 
 - name: Copy x509 cluster auth credentials
   copy:
@@ -127,9 +130,10 @@
     owner: "{{ mongodb_user }}"
     group: "root"
     mode: 0600
-  when: ( mongodb_net_ssl_clusterfile is defined
+  when: mongodb_net_ssl == "enabled"
+        and mongodb_net_ssl_clusterfile is defined
         and clusterfile_stat is defined
-        and not clusterfile_stat.stat.exists )
+        and not clusterfile_stat.stat.exists
 
 - name: Configure mongodb
   template:

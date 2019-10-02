@@ -37,7 +37,7 @@ security:
   {% if mongodb_replication_replset and mongodb_security_authorization == 'enabled' and mongodb_net_ssl_clusterfile is undefined -%}
   keyFile: {{ mongodb_security_keyfile }}
   {% endif -%}
-  {% if mongodb_net_ssl_clusterfile is defined -%}
+  {% if mongodb_net_ssl_clusterfile != "" -%}
   clusterAuthMode: x509
   {% endif -%}
   javascriptEnabled: {{ mongodb_security_javascript_enabled | to_nice_json }}

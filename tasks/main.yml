@@ -2,14 +2,14 @@
 
 - name: Check value of variable mongodb_net_ssl_host
   fail:
-    msg: 'Set mongodb_net_ssl_mode is preferSSL or set valid hostname for mongodb_net_ssl_host!'
-  when: ( mongodb_net_ssl_mode == 'requireSSL'
+    msg: 'Set mongodb_net_ssl_mode is preferTLS or set valid hostname for mongodb_net_ssl_host!'
+  when: ( mongodb_net_ssl_mode == 'requireTLS'
           and mongodb_net_ssl_host == '' )
 
 - name: Check value of variable mongodb_login_host
   fail:
     msg: 'Set mongodb_login_host equal mongodb_net_ssl_host!'
-  when: ( mongodb_net_ssl_mode == 'requireSSL'
+  when: ( mongodb_net_ssl_mode == 'requireTLS'
           and mongodb_net_ssl_host != mongodb_login_host
           and not mongodb_replication_replset )
 
@@ -45,7 +45,7 @@
 
 - name: Check where admin user already exists
   command: >
-    mongo --quiet {{ '--ssl --host ' + mongodb_net_ssl_host if mongodb_net_ssl_mode == 'requireSSL' else '' }} -u {{ mongodb_user_admin_name }} \
+    mongo --quiet {{ '--ssl --host ' + mongodb_net_ssl_host if mongodb_net_ssl_mode == 'requireTLS' else '' }} -u {{ mongodb_user_admin_name }} \
           -p {{ mongodb_user_admin_password }} --port {{ mongodb_net_port }} --eval 'db.version()' admin
   register: mongodb_user_admin_check
   changed_when: false
@@ -74,7 +74,7 @@
     login_password: "{{ mongodb_user_admin_password }}"
     login_port: "{{ mongodb_login_port|default(27017) }}"
     login_host: "{{ mongodb_login_host|default('localhost') }}"
-    ssl: "{{ True if mongodb_net_ssl_mode == 'requireSSL' else False }}"
+    ssl: "{{ True if mongodb_net_ssl_mode == 'requireTLS' else False }}"
     ssl_certfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile is defined else null }}"
     ssl_keyfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile is defined else null }}"
     ssl_ca_certs: "{{ mongodb_net_ssl_cafile_location if mongodb_net_ssl_cafile is defined else null }}"
@@ -97,7 +97,7 @@
     login_password: "{{ mongodb_user_admin_password }}"
     login_port: "{{ mongodb_net_port }}"
     login_host: "{{ mongodb_login_host|default('localhost') }}"
-    ssl: "{{ True if mongodb_net_ssl_mode == 'requireSSL' else False }}"
+    ssl: "{{ True if mongodb_net_ssl_mode == 'requireTLS' else False }}"
     ssl_certfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile is defined else null }}"
     ssl_keyfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile is defined else null }}"
     ssl_ca_certs: "{{ mongodb_net_ssl_cafile_location if mongodb_net_ssl_cafile is defined else null }}"
@@ -121,7 +121,7 @@
     login_password: "{{ mongodb_user_admin_password }}"
     login_port: "{{ mongodb_login_port|default(27017) }}"
     login_host: "{{ mongodb_login_host|default('localhost') }}"
-    ssl: "{{ True if mongodb_net_ssl_mode == 'requireSSL' else False }}"
+    ssl: "{{ True if mongodb_net_ssl_mode == 'requireTLS' else False }}"
     ssl_certfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile is defined else null }}"
     ssl_keyfile: "{{ mongodb_net_ssl_pemfile_location if mongodb_net_ssl_pemfile is defined else null }}"
     ssl_ca_certs: "{{ mongodb_net_ssl_cafile_location if mongodb_net_ssl_cafile is defined else null }}"

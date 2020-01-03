@@ -10,9 +10,9 @@ net:
   maxIncomingConnections: {{ mongodb_net_maxconns }}
   port: {{ mongodb_net_port }}
   {% if mongodb_net_ssl_pemfile is defined and mongodb_net_ssl_mode is defined and mongodb_net_ssl == 'enabled' -%}
-  ssl:
+  tls:
     mode: {{ mongodb_net_ssl_mode }}
-    PEMKeyFile: {{ mongodb_net_ssl_pemfile_location }}
+    certificateKeyFile: {{ mongodb_net_ssl_pemfile_location }}
     CAFile: {{ mongodb_net_ssl_cafile_location }}
     clusterFile: {{ mongodb_net_ssl_clusterfile_location }}
   {% endif %}

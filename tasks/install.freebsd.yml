@@ -1,0 +1,30 @@
+---
+
+- name: Establish some role-related facts
+  set_fact:
+    mongodb_major_version: "{{ mongodb_version[0:3] }}"
+
+- name: Install MongoDB package
+  pkgng:
+    name: "mongodb{{ mongodb_major_version.split(\".\")[0] }}{{ mongodb_major_version.split(\".\")[1] }}"
+    state: "{{ mongodb_package_state }}"
+
+- name: Install PyMongo package
+  pkgng:
+    name: py37-pymongo
+    state: present
+  when: not mongodb_pymongo_from_pip
+
+- name: Install PIP
+  pkgng:
+    name: py37-pip
+    state: present
+  when: mongodb_pymongo_from_pip | bool
+
+- name: Install PyMongo from PIP
+  pip:
+    name: pymongo
+    executable: /usr/local/bin/pip
+    state: "{{ mongodb_pymongo_pip_version is defined | ternary('present', 'latest') }}"
+    version: "{{ mongodb_pymongo_pip_version | default(omit) }}"
+  when: mongodb_pymongo_from_pip | bool

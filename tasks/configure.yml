@@ -137,7 +137,7 @@
 - name: Configure mongodb
   template:
     src: mongod.conf.j2
-    dest: /etc/mongod.conf
+    dest: "{{ mongodb_config_file }}"
     backup: true
     owner: root
     group: root
@@ -146,6 +146,21 @@
     - mongodb restart
     - service started
     - wait when mongodb is started
+  when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu" or ansible_os_family == "RedHat"
+
+- name: Configure mongodb
+  template:
+    src: mongod.conf.j2
+    dest: "{{ mongodb_config_file }}"
+    backup: true
+    owner: root
+    group: wheel
+    mode: 0644
+  notify:
+    - mongodb restart
+    - service started
+    - wait when mongodb is started
+  when: ansible_os_family == "FreeBSD"
 
 - name: Flush all handlers at this point
   meta: flush_handlers

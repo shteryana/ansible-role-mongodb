@@ -1,1 +1,2 @@
 mongodb_package: "mongodb"
+mongodb_config_file: "/usr/local/etc/mongodb.conf"

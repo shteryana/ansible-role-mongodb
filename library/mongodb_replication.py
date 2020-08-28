@@ -171,7 +171,7 @@ host_type:
   type: string
   sample: "replica"
 '''
-import ConfigParser
+import configparser as ConfigParser
 import ssl as ssl_lib
 import time
 from datetime import datetime as dtdatetime
